@@ -3,18 +3,27 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "./firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "./firebase";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [tipoUsuario, setTipoUsuario] = useState("estudante");
   const [erro, setErro] = useState("");
 
   async function handleCadastro(e) {
     e.preventDefault();
     setErro("");
     try {
-      await createUserWithEmailAndPassword(auth, email, senha);
+      const resultado = await createUserWithEmailAndPassword(auth, email, senha);
+      const usuario = resultado.user;
+
+      await setDoc(doc(db, "usuarios", usuario.uid), {
+        email: usuario.email,
+        tipo: tipoUsuario,
+      });
+
       alert("Conta criada com sucesso!");
     } catch (error) {
       setErro(error.message);
@@ -51,6 +60,29 @@ function Login() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
+        </div>
+
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="tipo"
+              value="estudante"
+              checked={tipoUsuario === "estudante"}
+              onChange={(e) => setTipoUsuario(e.target.value)}
+            />
+            Sou Estudante
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="tipo"
+              value="atletica"
+              checked={tipoUsuario === "atletica"}
+              onChange={(e) => setTipoUsuario(e.target.value)}
+            />
+            Sou Atlética
+          </label>
         </div>
 
         {erro && <p style={{ color: "red" }}>{erro}</p>}
