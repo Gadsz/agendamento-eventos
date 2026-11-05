@@ -4,6 +4,7 @@ import { db } from "./firebase";
 
 function VisualizarEventos() {
   const [listaEventos, setListaEventos] = useState([]);
+  const [dataFiltro, setDataFiltro] = useState("");
 
   useEffect(() => {
     const consulta = query(collection(db, "eventos"), orderBy("data"));
@@ -22,12 +23,31 @@ function VisualizarEventos() {
     return data.split("-").reverse().join("/");
   }
 
+  const eventosFiltrados = dataFiltro
+    ? listaEventos.filter((evento) => evento.data === dataFiltro)
+    : listaEventos;
+
   return (
     <div>
       <h2>Próximos Eventos</h2>
+
+      <div>
+        <label>Filtrar por data</label>
+        <input
+          type="date"
+          value={dataFiltro}
+          onChange={(e) => setDataFiltro(e.target.value)}
+        />
+        <button onClick={() => setDataFiltro("")}>Limpar</button>
+      </div>
+
       {listaEventos.length === 0 && <p>Nenhum evento cadastrado ainda.</p>}
+      {listaEventos.length > 0 && eventosFiltrados.length === 0 && (
+        <p>Nenhum evento nesta data.</p>
+      )}
+
       <ul>
-        {listaEventos.map((evento) => (
+        {eventosFiltrados.map((evento) => (
           <li key={evento.id}>
             <strong>{evento.nome}</strong> — {formatarData(evento.data)} (
             {evento.tipo})
