@@ -2,6 +2,18 @@ import { useState, useEffect } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 
+// Data de hoje no fuso local, no formato AAAA-MM-DD (o mesmo do campo "data").
+function hojeISO() {
+  const agora = new Date();
+  const mes = String(agora.getMonth() + 1).padStart(2, "0");
+  const dia = String(agora.getDate()).padStart(2, "0");
+  return `${agora.getFullYear()}-${mes}-${dia}`;
+}
+
+function formatarData(data) {
+  return data ? data.split("-").reverse().join("/") : "";
+}
+
 function VisualizarEventos() {
   const [listaEventos, setListaEventos] = useState([]);
   const [dataFiltro, setDataFiltro] = useState("");
@@ -19,13 +31,12 @@ function VisualizarEventos() {
     return () => cancelar();
   }, []);
 
-  function formatarData(data) {
-    return data.split("-").reverse().join("/");
-  }
+  const hoje = hojeISO();
+  const eventosFuturos = listaEventos.filter((evento) => evento.data >= hoje);
 
   const eventosFiltrados = dataFiltro
-    ? listaEventos.filter((evento) => evento.data === dataFiltro)
-    : listaEventos;
+    ? eventosFuturos.filter((evento) => evento.data === dataFiltro)
+    : eventosFuturos;
 
   return (
     <div>
@@ -35,14 +46,15 @@ function VisualizarEventos() {
         <label>Filtrar por data</label>
         <input
           type="date"
+          min={hoje}
           value={dataFiltro}
           onChange={(e) => setDataFiltro(e.target.value)}
         />
         <button onClick={() => setDataFiltro("")}>Limpar</button>
       </div>
 
-      {listaEventos.length === 0 && <p>Nenhum evento cadastrado ainda.</p>}
-      {listaEventos.length > 0 && eventosFiltrados.length === 0 && (
+      {eventosFuturos.length === 0 && <p>Nenhum evento futuro cadastrado.</p>}
+      {eventosFuturos.length > 0 && eventosFiltrados.length === 0 && (
         <p>Nenhum evento nesta data.</p>
       )}
 

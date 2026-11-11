@@ -6,6 +6,26 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "./firebase";
 
+function traduzirErro(error) {
+  switch (error.code) {
+    case "auth/invalid-email":
+      return "E-mail inválido.";
+    case "auth/missing-password":
+    case "auth/weak-password":
+      return "A senha deve ter pelo menos 6 caracteres.";
+    case "auth/email-already-in-use":
+      return "Este e-mail já está cadastrado.";
+    case "auth/invalid-credential":
+    case "auth/user-not-found":
+    case "auth/wrong-password":
+      return "E-mail ou senha incorretos.";
+    case "auth/too-many-requests":
+      return "Muitas tentativas. Aguarde um pouco e tente novamente.";
+    default:
+      return "Não foi possível concluir a operação. Tente novamente.";
+  }
+}
+
 function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
@@ -15,29 +35,43 @@ function Login() {
   async function handleCadastro(e) {
     e.preventDefault();
     setErro("");
+
+    if (!email.trim() || !senha) {
+      setErro("Preencha e-mail e senha.");
+      return;
+    }
+
     try {
-      const resultado = await createUserWithEmailAndPassword(auth, email, senha);
+      const resultado = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        senha
+      );
       const usuario = resultado.user;
 
       await setDoc(doc(db, "usuarios", usuario.uid), {
         email: usuario.email,
         tipo: tipoUsuario,
       });
-
-      alert("Conta criada com sucesso!");
+      // Após o cadastro, o App detecta o login e abre a tela do perfil.
     } catch (error) {
-      setErro(error.message);
+      setErro(traduzirErro(error));
     }
   }
 
   async function handleLogin(e) {
     e.preventDefault();
     setErro("");
+
+    if (!email.trim() || !senha) {
+      setErro("Preencha e-mail e senha.");
+      return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, senha);
-      alert("Login realizado com sucesso!");
+      await signInWithEmailAndPassword(auth, email.trim(), senha);
     } catch (error) {
-      setErro(error.message);
+      setErro(traduzirErro(error));
     }
   }
 

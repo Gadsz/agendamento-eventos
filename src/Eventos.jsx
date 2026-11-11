@@ -9,6 +9,10 @@ import {
 } from "firebase/firestore";
 import { db } from "./firebase";
 
+function formatarData(data) {
+  return data ? data.split("-").reverse().join("/") : "";
+}
+
 function Eventos() {
   const [nome, setNome] = useState("");
   const [data, setData] = useState("");
@@ -16,48 +20,78 @@ function Eventos() {
   const [descricao, setDescricao] = useState("");
   const [listaEventos, setListaEventos] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     const referenciaEventos = collection(db, "eventos");
     const unsubscribe = onSnapshot(referenciaEventos, (snapshot) => {
-      const eventos = snapshot.docs.map((docSnap) => ({
-        id: docSnap.id,
-        ...docSnap.data(),
-      }));
+      const eventos = snapshot.docs
+        .map((docSnap) => ({
+          id: docSnap.id,
+          ...docSnap.data(),
+        }))
+        .sort((a, b) => (a.data || "").localeCompare(b.data || ""));
       setListaEventos(eventos);
     });
 
     return () => unsubscribe();
   }, []);
 
-  async function handleSalvar(e) {
-    e.preventDefault();
-
-    const dadosEvento = { nome, data, tipo, descricao };
-
-    if (editandoId) {
-      await updateDoc(doc(db, "eventos", editandoId), dadosEvento);
-      setEditandoId(null);
-    } else {
-      await addDoc(collection(db, "eventos"), dadosEvento);
-    }
-
+  function limparFormulario() {
     setNome("");
     setData("");
     setTipo("esportivo");
     setDescricao("");
+    setEditandoId(null);
+  }
+
+  async function handleSalvar(e) {
+    e.preventDefault();
+    setErro("");
+
+    if (!nome.trim() || !data) {
+      setErro("Informe o nome e a data do evento.");
+      return;
+    }
+
+    const dadosEvento = {
+      nome: nome.trim(),
+      data,
+      tipo,
+      descricao: descricao.trim(),
+    };
+
+    try {
+      if (editandoId) {
+        await updateDoc(doc(db, "eventos", editandoId), dadosEvento);
+      } else {
+        await addDoc(collection(db, "eventos"), dadosEvento);
+      }
+      limparFormulario();
+    } catch (error) {
+      setErro("Não foi possível salvar o evento. Tente novamente.");
+    }
   }
 
   function handleEditar(evento) {
+    setErro("");
     setNome(evento.nome);
     setData(evento.data);
     setTipo(evento.tipo);
-    setDescricao(evento.descricao);
+    setDescricao(evento.descricao || "");
     setEditandoId(evento.id);
   }
 
-  async function handleExcluir(id) {
-    await deleteDoc(doc(db, "eventos", id));
+  async function handleExcluir(evento) {
+    if (!window.confirm(`Excluir o evento "${evento.nome}"?`)) return;
+
+    setErro("");
+    try {
+      await deleteDoc(doc(db, "eventos", evento.id));
+      if (editandoId === evento.id) limparFormulario();
+    } catch (error) {
+      setErro("Não foi possível excluir o evento. Tente novamente.");
+    }
   }
 
   return (
@@ -91,19 +125,29 @@ function Eventos() {
             onChange={(e) => setDescricao(e.target.value)}
           />
         </div>
+
+        {erro && <p style={{ color: "red" }}>{erro}</p>}
+
         <button type="submit">
           {editandoId ? "Salvar Alteração" : "Cadastrar Evento"}
         </button>
+        {editandoId && (
+          <button type="button" onClick={limparFormulario}>
+            Cancelar edição
+          </button>
+        )}
       </form>
 
       <h3>Eventos Cadastrados</h3>
+      {listaEventos.length === 0 && <p>Nenhum evento cadastrado ainda.</p>}
       <ul>
         {listaEventos.map((evento) => (
           <li key={evento.id}>
-            <strong>{evento.nome}</strong> — {evento.data} ({evento.tipo})
+            <strong>{evento.nome}</strong> — {formatarData(evento.data)} (
+            {evento.tipo})
             <p>{evento.descricao}</p>
             <button onClick={() => handleEditar(evento)}>Editar</button>
-            <button onClick={() => handleExcluir(evento.id)}>Excluir</button>
+            <button onClick={() => handleExcluir(evento)}>Excluir</button>
           </li>
         ))}
       </ul>
