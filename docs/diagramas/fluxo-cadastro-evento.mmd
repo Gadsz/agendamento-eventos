@@ -1,0 +1,16 @@
+sequenceDiagram
+  actor A as Atlética
+  participant S as Aplicação Web
+  participant F as Firestore
+  A->>S: Preenche nome, data, tipo e descrição
+  S->>S: Valida nome e data
+  S->>F: addDoc(eventos) com atleticaId e atleticaEmail
+  F->>F: Regras: perfil é atletica e atleticaId = UID?
+  alt Regras aceitam
+    F-->>S: Evento gravado
+    F-->>S: Atualização em tempo real da lista
+    S-->>A: Evento aparece em Meus Eventos
+  else Regras recusam
+    F-->>S: permission-denied
+    S-->>A: Mensagem de erro
+  end

@@ -76,28 +76,37 @@ function Login() {
   }
 
   return (
-    <div>
-      <h2>Entrar ou Criar Conta</h2>
+    <div className="card auth-card">
+      <h2>Entrar ou criar conta</h2>
+      <p className="muted">
+        Acesse a agenda de eventos das atléticas de Cascavel.
+      </p>
+
       <form>
-        <div>
-          <label>E-mail</label>
+        <div className="field">
+          <label htmlFor="email">E-mail</label>
           <input
+            id="email"
             type="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div>
-          <label>Senha</label>
+        <div className="field">
+          <label htmlFor="senha">Senha</label>
           <input
+            id="senha"
             type="password"
+            autoComplete="current-password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
         </div>
 
-        <div>
-          <label>
+        <fieldset className="perfil-opcoes">
+          <legend>Ao criar a conta, eu sou:</legend>
+          <label className="opcao">
             <input
               type="radio"
               name="tipo"
@@ -105,9 +114,9 @@ function Login() {
               checked={tipoUsuario === "estudante"}
               onChange={(e) => setTipoUsuario(e.target.value)}
             />
-            Sou Estudante
+            Estudante
           </label>
-          <label>
+          <label className="opcao">
             <input
               type="radio"
               name="tipo"
@@ -115,14 +124,24 @@ function Login() {
               checked={tipoUsuario === "atletica"}
               onChange={(e) => setTipoUsuario(e.target.value)}
             />
-            Sou Atlética
+            Atlética
           </label>
+        </fieldset>
+
+        {erro && (
+          <p className="error" role="alert">
+            {erro}
+          </p>
+        )}
+
+        <div className="actions">
+          <button className="btn btn-primary" onClick={handleLogin}>
+            Entrar
+          </button>
+          <button className="btn btn-secondary" onClick={handleCadastro}>
+            Criar conta
+          </button>
         </div>
-
-        {erro && <p style={{ color: "red" }}>{erro}</p>}
-
-        <button onClick={handleLogin}>Entrar</button>
-        <button onClick={handleCadastro}>Criar Conta</button>
       </form>
     </div>
   );

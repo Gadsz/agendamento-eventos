@@ -42,22 +42,48 @@ function App() {
     };
   }, []);
 
-  if (carregando) return <p>Carregando...</p>;
+  if (carregando) {
+    return (
+      <main className="page">
+        <p className="info">Carregando...</p>
+      </main>
+    );
+  }
 
-  if (!usuario) return <Login />;
+  if (!usuario) {
+    return (
+      <main className="page auth-page">
+        <Login />
+      </main>
+    );
+  }
 
   return (
-    <div>
-      <p>
-        Logado como {usuario.email} {perfil && `(${perfil.tipo})`}{" "}
-        <button onClick={() => signOut(auth)}>Sair</button>
-      </p>
-      <hr />
+    <>
+      <header className="topbar">
+        <strong className="topbar-title">Eventos das Atléticas</strong>
+        <div className="topbar-user">
+          <span className="user-email">{usuario.email}</span>
+          {perfil && (
+            <span className="badge badge-perfil">
+              {perfil.tipo === "atletica" ? "Atlética" : "Estudante"}
+            </span>
+          )}
+          <button
+            className="btn btn-secondary btn-sm"
+            onClick={() => signOut(auth)}
+          >
+            Sair
+          </button>
+        </div>
+      </header>
 
-      {!perfil && <p>Carregando perfil...</p>}
-      {perfil?.tipo === "atletica" && <Eventos />}
-      {perfil?.tipo === "estudante" && <VisualizarEventos />}
-    </div>
+      <main className="page">
+        {!perfil && <p className="info">Carregando perfil...</p>}
+        {perfil?.tipo === "atletica" && <Eventos />}
+        {perfil?.tipo === "estudante" && <VisualizarEventos />}
+      </main>
+    </>
   );
 }
 
