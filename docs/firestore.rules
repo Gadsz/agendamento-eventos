@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function ehAtletica() {
+      let ref = /databases/$(database)/documents/usuarios/$(request.auth.uid);
+      return request.auth != null && exists(ref) && get(ref).data.tipo == 'atletica';
+    }
+    function ehEstudante() {
+      let ref = /databases/$(database)/documents/usuarios/$(request.auth.uid);
+      return request.auth != null && exists(ref) && get(ref).data.tipo == 'estudante';
+    }
+
+    match /usuarios/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.tipo in ['estudante', 'atletica'];
+      allow update, delete: if false;
+    }
+
+    match /eventos/{id} {
+      allow read: if request.auth != null;
+      allow create: if ehAtletica()
+        && request.resource.data.atleticaId == request.auth.uid;
+      allow update: if ehAtletica()
+        && resource.data.atleticaId == request.auth.uid
+        && request.resource.data.atleticaId == request.auth.uid;
+      allow delete: if ehAtletica()
+        && resource.data.atleticaId == request.auth.uid;
+    }
+
+    // Confirmação de presença: um documento por estudante e evento (id = eventoId_uid).
+    match /confirmacoes/{id} {
+      allow read: if request.auth != null
+        && (resource.data.usuarioId == request.auth.uid
+            || resource.data.atleticaId == request.auth.uid);
+      allow create: if ehEstudante()
+        && request.resource.data.usuarioId == request.auth.uid
+        && id == request.resource.data.eventoId + '_' + request.auth.uid
+        && get(/databases/$(database)/documents/eventos/$(request.resource.data.eventoId)).data.atleticaId
+           == request.resource.data.atleticaId;
+      allow update: if false;
+      allow delete: if request.auth != null
+        && (resource.data.usuarioId == request.auth.uid
+            || resource.data.atleticaId == request.auth.uid);
+    }
+  }
+}
