@@ -1,0 +1,143 @@
+/* Eventos das Atléticas — Design System — generated from tokens.json */
+:root, [data-theme="menta"] {
+  --bg: #1b2821;
+  --orb-1: rgba(33,196,156,0.35);
+  --orb-2: rgba(7,52,151,0.35);
+  --orb-3: rgba(252,132,114,0.35);
+  --surface: rgba(12,20,17,0.45);
+  --surface-strong: rgba(12,20,17,0.62);
+  --border: rgba(255,255,255,0.14);
+  --border-strong: rgba(255,255,255,0.45);
+  --input: rgba(255,255,255,0.06);
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.84);
+  --primary: #58fedb;
+  --on-primary: #1b2821;
+  --highlight: #58fedb;
+  --focus: var(--highlight);
+  --sport: #58fedb;
+  --sport-bg: rgba(88,254,219,0.16);
+  --party: #ff9c8c;
+  --party-bg: rgba(252,132,114,0.2);
+  --danger: #ff9a9a;
+  --danger-bg: rgba(255,92,108,0.16);
+  --avatar-1: #21c49c;
+  --avatar-2: #fc8472;
+  --on-avatar: #1b2821;
+  --scrim: rgba(0,0,0,0.55);
+  --shadow-float: 0 40px 80px rgba(0,0,0,0.35);
+}
+[data-theme="por-do-sol"] {
+  --bg: #35284a;
+  --orb-1: rgba(251,125,121,0.24);
+  --orb-2: rgba(129,111,144,0.24);
+  --orb-3: rgba(248,205,158,0.24);
+  --surface: rgba(31,22,48,0.45);
+  --surface-strong: rgba(31,22,48,0.62);
+  --border: rgba(255,255,255,0.16);
+  --border-strong: rgba(255,255,255,0.45);
+  --input: rgba(255,255,255,0.06);
+  --text: #ffffff;
+  --text-muted: rgba(255,255,255,0.85);
+  --primary: #f8cd9e;
+  --on-primary: #35284a;
+  --highlight: #fadda5;
+  --focus: var(--highlight);
+  --sport: #fadda5;
+  --sport-bg: rgba(250,221,165,0.16);
+  --party: #f59997;
+  --party-bg: rgba(245,153,151,0.2);
+  --danger: #ffb0b0;
+  --danger-bg: rgba(255,92,108,0.2);
+  --avatar-1: #fb7d79;
+  --avatar-2: #fadda5;
+  --on-avatar: #35284a;
+  --scrim: rgba(15,10,25,0.6);
+  --shadow-float: 0 40px 80px rgba(0,0,0,0.3);
+}
+[data-theme="pastel"] {
+  --bg: #e7d5e3;
+  --orb-1: rgba(160,177,222,0.9);
+  --orb-2: rgba(253,211,217,0.9);
+  --orb-3: rgba(254,212,170,0.9);
+  --surface: rgba(252,253,253,0.55);
+  --surface-strong: rgba(252,253,253,0.75);
+  --border: rgba(252,253,253,0.95);
+  --border-strong: #767892;
+  --input: rgba(252,253,253,0.7);
+  --text: #2f3044;
+  --text-muted: rgba(47,48,68,0.82);
+  --primary: #2f3044;
+  --on-primary: #fcfdfd;
+  --highlight: #4d3866;
+  --focus: var(--highlight);
+  --sport: #2f3044;
+  --sport-bg: rgba(160,177,222,0.6);
+  --party: #2f3044;
+  --party-bg: rgba(253,211,217,0.9);
+  --danger: #a8283a;
+  --danger-bg: rgba(168,40,58,0.1);
+  --avatar-1: #a0b1de;
+  --avatar-2: #fed4aa;
+  --on-avatar: #2f3044;
+  --scrim: rgba(47,48,68,0.45);
+  --shadow-float: 0 40px 80px rgba(118,120,146,0.22);
+}
+[data-theme="chiclete"] {
+  --bg: #2a252b;
+  --orb-1: rgba(252,182,216,0.24);
+  --orb-2: rgba(24,84,218,0.24);
+  --orb-3: rgba(77,168,213,0.24);
+  --surface: rgba(22,18,22,0.45);
+  --surface-strong: rgba(22,18,22,0.62);
+  --border: rgba(255,255,255,0.14);
+  --border-strong: rgba(255,255,255,0.45);
+  --input: rgba(255,255,255,0.06);
+  --text: #fbfafa;
+  --text-muted: rgba(251,250,250,0.84);
+  --primary: #fcb6d8;
+  --on-primary: #2a252b;
+  --highlight: #fcb6d8;
+  --focus: var(--highlight);
+  --sport: #7cc4e8;
+  --sport-bg: rgba(77,168,213,0.2);
+  --party: #fcb6d8;
+  --party-bg: rgba(252,182,216,0.18);
+  --danger: #ff9aa6;
+  --danger-bg: rgba(255,92,108,0.16);
+  --avatar-1: #fcb6d8;
+  --avatar-2: #4da8d5;
+  --on-avatar: #2a252b;
+  --scrim: rgba(0,0,0,0.55);
+  --shadow-float: 0 40px 80px rgba(0,0,0,0.35);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --radius-s: 12px;
+  --radius-m: 14px;
+  --radius-l: 18px;
+  --radius-xl: 26px;
+  --radius-2xl: 30px;
+  --radius-pill: 999px;
+  --blur-glass: 24px;
+  --blur-orb: 130px;
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+.display-xl { font-family: var(--font-display); font-size: 60px; line-height: 1; font-weight: 800; letter-spacing: -0.045em; }
+.display-l { font-family: var(--font-display); font-size: 34px; line-height: 1.04; font-weight: 800; letter-spacing: -0.045em; }
+.title { font-family: var(--font-display); font-size: 26px; line-height: 1.15; font-weight: 700; letter-spacing: -0.03em; }
+.title-s { font-family: var(--font-display); font-size: 19px; line-height: 1.2; font-weight: 700; letter-spacing: -0.02em; }
+.numeral { font-family: var(--font-display); font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; }
+.body-l { font-family: var(--font-sans); font-size: 17px; line-height: 1.6; font-weight: 400; }
+.body { font-family: var(--font-sans); font-size: 15px; line-height: 1.55; font-weight: 400; }
+.label { font-family: var(--font-sans); font-size: 13px; line-height: 1.3; font-weight: 600; }
+.caption { font-family: var(--font-sans); font-size: 12px; line-height: 1.3; font-weight: 700; letter-spacing: 0.08em; }
+.button { font-family: var(--font-sans); font-size: 15px; line-height: 1; font-weight: 700; }
